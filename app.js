@@ -217,24 +217,29 @@ async function loadTasks() {
   list.innerHTML = "";
 
   tasks.forEach((t) => {
-    // znajdź nazwę przedmiotu po ID
     const subjName =
       subjects.find((s) => s.id === t.subject_id)?.name ||
-      "Nie przypisano przedmiotu";
+      "Nie przypisano";
 
-    // li z danymi
+    // Tworzymy element zadania
     const li = document.createElement("li");
     li.dataset.priority = t.priority;
+
     li.innerHTML = `
-      <strong>${t.title}</strong><br>
-      <span class="subject-name">📘 ${subjName}</span><br>
-      <span class="priority">⚡ ${t.priority}</span> • 
-      <span class="due">🗓️ do ${t.due_date}</span><br>
-      <small>🕒 Dodano: ${new Date(t.created_at).toLocaleString()}</small>
+      <div class="task-header">
+        <strong class="task-title">${t.title}</strong>
+        <span class="subject-badge">${subjName}</span>
+      </div>
+      <div class="task-meta">
+        <span class="priority">⚡ ${t.priority}</span> • 
+        <span class="due">🗓️ ${t.due_date}</span>
+      </div>
+      <small class="task-date">🕒 ${new Date(t.created_at).toLocaleString()}</small>
     `;
 
     const del = document.createElement("button");
     del.textContent = "🗑️";
+    del.classList.add("delete-btn");
     del.onclick = async () => {
       if (confirm("Usunąć to zadanie?")) {
         await fetch(`${API_URL}/tasks/${t.id}`, {
@@ -249,7 +254,6 @@ async function loadTasks() {
     list.appendChild(li);
   });
 }
-
 
 // =====================
 // Dodawanie zadania
