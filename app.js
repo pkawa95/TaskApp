@@ -207,14 +207,30 @@ async function loadTasks() {
   if (!res.ok) return;
   const tasks = await res.json();
 
+  // pobierz listę przedmiotów, by mieć ich nazwy
+  const subjRes = await fetch(`${API_URL}/subjects`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const subjects = subjRes.ok ? await subjRes.json() : [];
+
   const list = document.getElementById("tasks");
   list.innerHTML = "";
 
   tasks.forEach((t) => {
+    // znajdź nazwę przedmiotu po ID
+    const subjName =
+      subjects.find((s) => s.id === t.subject_id)?.name ||
+      "Nie przypisano przedmiotu";
+
+    // li z danymi
     const li = document.createElement("li");
+    li.dataset.priority = t.priority;
     li.innerHTML = `
-      <strong>${t.title}</strong> — ${t.priority} — ${t.due_date}
-      <br><small>Dodano: ${new Date(t.created_at).toLocaleString()}</small>
+      <strong>${t.title}</strong><br>
+      <span class="subject-name">📘 ${subjName}</span><br>
+      <span class="priority">⚡ ${t.priority}</span> • 
+      <span class="due">🗓️ do ${t.due_date}</span><br>
+      <small>🕒 Dodano: ${new Date(t.created_at).toLocaleString()}</small>
     `;
 
     const del = document.createElement("button");
@@ -233,6 +249,7 @@ async function loadTasks() {
     list.appendChild(li);
   });
 }
+
 
 // =====================
 // Dodawanie zadania
