@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TaskApp</title>
+  <title>🎓 TaskApp</title>
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -23,17 +23,17 @@
       <h2>Logowanie / Rejestracja</h2>
 
       <div id="register-form" class="form">
-        <input type="text" id="first_name" placeholder="Imię">
-        <input type="text" id="last_name" placeholder="Nazwisko">
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="password" placeholder="Hasło">
-        <input type="password" id="confirm_password" placeholder="Powtórz hasło">
+        <input type="text" id="first_name" placeholder="Imię" required>
+        <input type="text" id="last_name" placeholder="Nazwisko" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Hasło" required>
+        <input type="password" id="confirm_password" placeholder="Powtórz hasło" required>
         <button id="register">Zarejestruj</button>
       </div>
 
       <div id="login-form" class="form">
-        <input type="email" id="login-email" placeholder="Email">
-        <input type="password" id="login-password" placeholder="Hasło">
+        <input type="email" id="login-email" placeholder="Email" required>
+        <input type="password" id="login-password" placeholder="Hasło" required>
         <button id="login">Zaloguj</button>
       </div>
 
@@ -54,9 +54,11 @@
         <h3>Twoje przedmioty</h3>
         <ul id="subjects"></ul>
 
-        <input type="text" id="new-subject-name" placeholder="Nazwa przedmiotu">
-        <input type="text" id="new-subject-desc" placeholder="Opis (opcjonalny)">
-        <button id="add-subject">Dodaj przedmiot</button>
+        <div class="form-inline">
+          <input type="text" id="new-subject-name" placeholder="Nazwa przedmiotu" required>
+          <input type="text" id="new-subject-desc" placeholder="Opis (opcjonalny)">
+          <button id="add-subject">Dodaj przedmiot</button>
+        </div>
       </div>
 
       <!-- ZADANIA -->
@@ -68,13 +70,13 @@
         <select id="subject-select">
           <option value="">Wybierz przedmiot</option>
         </select>
-        <input type="text" id="task-title" placeholder="Tytuł zadania">
+        <input type="text" id="task-title" placeholder="Tytuł zadania" required>
         <select id="priority">
           <option value="Niski">Niski</option>
           <option value="Średni">Średni</option>
           <option value="Pilny">Pilny</option>
         </select>
-        <input type="date" id="due_date">
+        <input type="date" id="due_date" required>
         <button id="add-task">Dodaj zadanie</button>
       </div>
     </section>
@@ -84,6 +86,7 @@
     <p>© 2025 TaskApp • PWA</p>
   </footer>
 
+  <!-- Zewnętrzny plik JS -->
   <script src="app.js"></script>
 </body>
 </html>
