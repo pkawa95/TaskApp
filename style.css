@@ -15,7 +15,6 @@ body {
   overflow-x: hidden;
 }
 
-/* glowing cursor highlight effect */
 ::selection {
   background: #38bdf8;
   color: #0f172a;
@@ -200,11 +199,41 @@ li {
   box-shadow: 0 0 10px rgba(56, 189, 248, 0.05);
   position: relative;
   overflow: hidden;
+  animation: slideIn 0.5s ease;
+  transform-origin: bottom;
 }
 
 li:hover {
   transform: scale(1.01);
   box-shadow: 0 0 15px rgba(56, 189, 248, 0.25);
+}
+
+/* Slide & Fade for tasks */
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Task disappearing animation */
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+.task-fadeout {
+  animation: fadeOut 0.4s ease forwards;
 }
 
 li strong {
@@ -218,22 +247,6 @@ li strong {
 li small {
   color: #94a3b8;
   font-size: 0.85em;
-}
-
-li button {
-  background: rgba(239, 68, 68, 0.8);
-  color: #fff;
-  border: none;
-  padding: 0.4em 0.8em;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  float: right;
-}
-
-li button:hover {
-  background: #dc2626;
-  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
 }
 
 /* ---------- TASK PRIORITY COLORS ---------- */
@@ -250,27 +263,41 @@ li[data-priority="Średni"] {
 li[data-priority="Pilny"] {
   border-left: 5px solid #ef4444;
   box-shadow: inset 0 0 12px rgba(239, 68, 68, 0.3);
+  animation: pulseGlow 2s infinite ease-in-out;
 }
 
-/* ---------- FORMS ---------- */
-input, select {
-  display: block;
-  width: 100%;
-  padding: 0.8em 1em;
-  margin: 0.5em 0;
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  border-radius: 10px;
-  background: rgba(15, 23, 42, 0.6);
-  color: #f8fafc;
-  backdrop-filter: blur(8px);
+/* ---------- TASK STYLES ---------- */
+.task-title {
+  font-size: 1.1em;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 6px rgba(255,255,255,0.2);
 }
 
-input:focus, select:focus {
-  outline: none;
-  border-color: #38bdf8;
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+.subject-badge {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  border-radius: 20px;
+  padding: 0.3em 0.8em;
+  font-size: 0.85em;
+  margin-left: 10px;
+  font-weight: 600;
+  text-shadow: 0 0 5px rgba(56,189,248,0.5);
 }
 
+.task-meta {
+  margin-top: 0.3em;
+  color: #cbd5e1;
+  font-size: 0.9em;
+}
+
+.task-date {
+  color: #64748b;
+  font-size: 0.8em;
+}
+
+/* ---------- BUTTONS ---------- */
 button {
   background: linear-gradient(90deg, #38bdf8, #818cf8);
   color: #0f172a;
@@ -288,6 +315,59 @@ button:hover {
   box-shadow: 0 0 25px rgba(56, 189, 248, 0.6);
 }
 
+/* Delete Button */
+.delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(239, 68, 68, 0.8);
+  border: none;
+  color: #fff;
+  padding: 0.3em 0.7em;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+/* Done Button */
+.done-btn {
+  background: rgba(34, 197, 94, 0.9);
+  color: #fff;
+  padding: 0.4em 0.8em;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.6em;
+}
+
+.done-btn:hover {
+  background: #16a34a;
+  box-shadow: 0 0 12px rgba(34,197,94,0.4);
+}
+
+/* ---------- ANIMACJA DLA PILNYCH ---------- */
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.3),
+                inset 0 0 6px rgba(239, 68, 68, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.6),
+                inset 0 0 12px rgba(239, 68, 68, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.3),
+                inset 0 0 6px rgba(239, 68, 68, 0.2);
+  }
+}
+
 /* ---------- FOOTER ---------- */
 footer {
   text-align: center;
@@ -297,18 +377,6 @@ footer {
   font-size: 0.9em;
   backdrop-filter: blur(10px);
   border-top: 1px solid rgba(56, 189, 248, 0.2);
-}
-
-/* ---------- ANIMATIONS ---------- */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* ---------- RESPONSIVE ---------- */
@@ -334,128 +402,4 @@ footer {
   nav button {
     padding: 0.5em 1em;
   }
-}
-
-/* Stylizacja nazw przedmiotów w zadaniach */
-.subject-name {
-  color: #38bdf8;
-  font-weight: 600;
-  text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
-}
-
-.priority {
-  font-weight: 600;
-}
-
-.due {
-  color: #facc15;
-  font-weight: 500;
-}
-
-
-/* ---------- TASK STYLES ---------- */
-li {
-  position: relative;
-  border-radius: 14px;
-  margin-bottom: 1em;
-  padding: 1em;
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(10px);
-  transition: 0.3s ease;
-}
-
-li:hover {
-  transform: scale(1.02);
-}
-
-/* Kolorowe ramki wg priorytetu */
-li[data-priority="Niski"] {
-  border: 2px solid #22c55e;
-  box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
-}
-
-li[data-priority="Średni"] {
-  border: 2px solid #facc15;
-  box-shadow: 0 0 10px rgba(250, 204, 21, 0.3);
-}
-
-li[data-priority="Pilny"] {
-  border: 2px solid #ef4444;
-  box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
-}
-
-/* Tytuł */
-.task-title {
-  font-size: 1.1em;
-  font-weight: 700;
-  color: #fff;
-  text-shadow: 0 0 6px rgba(255,255,255,0.2);
-}
-
-/* Kapsułka z nazwą przedmiotu */
-.subject-badge {
-  background: rgba(56, 189, 248, 0.15);
-  color: #38bdf8;
-  border: 1px solid rgba(56, 189, 248, 0.5);
-  border-radius: 20px;
-  padding: 0.3em 0.8em;
-  font-size: 0.85em;
-  margin-left: 10px;
-  font-weight: 600;
-  text-shadow: 0 0 5px rgba(56,189,248,0.5);
-}
-
-/* Metadane */
-.task-meta {
-  margin-top: 0.3em;
-  color: #cbd5e1;
-  font-size: 0.9em;
-}
-
-.task-date {
-  color: #64748b;
-  font-size: 0.8em;
-}
-
-/* Przyciski usuwania */
-.delete-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(239, 68, 68, 0.8);
-  border: none;
-  color: #fff;
-  padding: 0.3em 0.7em;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.3s;
-}
-
-.delete-btn:hover {
-  background: #dc2626;
-  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
-}
-
-/* ---------- ANIMACJA DLA PILNYCH ZADAŃ ---------- */
-@keyframes pulseGlow {
-  0% {
-    box-shadow: 0 0 8px rgba(239, 68, 68, 0.3),
-                inset 0 0 6px rgba(239, 68, 68, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 16px rgba(239, 68, 68, 0.6),
-                inset 0 0 12px rgba(239, 68, 68, 0.4);
-  }
-  100% {
-    box-shadow: 0 0 8px rgba(239, 68, 68, 0.3),
-                inset 0 0 6px rgba(239, 68, 68, 0.2);
-  }
-}
-
-/* nadajemy efekt tylko dla pilnych */
-li[data-priority="Pilny"] {
-  border: 2px solid #ef4444;
-  animation: pulseGlow 1.8s infinite ease-in-out;
-  transition: all 0.3s ease;
 }

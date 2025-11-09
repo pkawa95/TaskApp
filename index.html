@@ -18,7 +18,9 @@
   </header>
 
   <main>
-    <!-- SEKCA LOGOWANIA / REJESTRACJI -->
+    <!-- =======================
+         SEKCA LOGOWANIA / REJESTRACJI
+    ========================== -->
     <section id="auth-section">
       <h2>Logowanie / Rejestracja</h2>
 
@@ -40,13 +42,16 @@
       <p id="auth-msg"></p>
     </section>
 
-    <!-- SEKCA ZADAŃ -->
+    <!-- =======================
+         SEKCA PRZEDMIOTÓW / ZADAŃ
+    ========================== -->
     <section id="tasks-section" class="hidden">
       <h2>Twoje przedmioty i zadania</h2>
 
       <div class="tabs">
         <button class="tab active" data-tab="subjects">📚 Przedmioty</button>
-        <button class="tab" data-tab="tasks">✅ Zadania</button>
+        <button class="tab" data-tab="tasks">🕓 W trakcie</button>
+        <button class="tab" data-tab="completed">✅ Ukończone</button>
       </div>
 
       <!-- PRZEDMIOTY -->
@@ -54,30 +59,44 @@
         <h3>Twoje przedmioty</h3>
         <ul id="subjects"></ul>
 
+        <h4>Dodaj nowy przedmiot</h4>
         <div class="form-inline">
           <input type="text" id="new-subject-name" placeholder="Nazwa przedmiotu" required>
-          <input type="text" id="new-subject-desc" placeholder="Opis (opcjonalny)">
-          <button id="add-subject">Dodaj przedmiot</button>
+          <input type="text" id="new-subject-teacher" placeholder="Prowadzący (opcjonalnie)">
+          <input type="color" id="new-subject-color" value="#38bdf8" title="Kolor przedmiotu">
+          <textarea id="new-subject-desc" placeholder="Opis (opcjonalny)"></textarea>
+          <button id="add-subject">➕ Dodaj przedmiot</button>
         </div>
       </div>
 
-      <!-- ZADANIA -->
+      <!-- ZADANIA W TRAKCIE -->
       <div id="tasks-tab" class="tab-content">
-        <h3>Twoje zadania</h3>
+        <h3>Twoje zadania (w trakcie)</h3>
         <ul id="tasks"></ul>
 
         <h4>Dodaj nowe zadanie</h4>
-        <select id="subject-select">
-          <option value="">Wybierz przedmiot</option>
-        </select>
-        <input type="text" id="task-title" placeholder="Tytuł zadania" required>
-        <select id="priority">
-          <option value="Niski">Niski</option>
-          <option value="Średni">Średni</option>
-          <option value="Pilny">Pilny</option>
-        </select>
-        <input type="date" id="due_date" required>
-        <button id="add-task">Dodaj zadanie</button>
+        <form id="task-form" enctype="multipart/form-data">
+          <select id="subject-select">
+            <option value="">Wybierz przedmiot</option>
+          </select>
+          <input type="text" id="task-title" placeholder="Tytuł zadania" required>
+          <textarea id="task-desc" placeholder="Opis (opcjonalnie)"></textarea>
+          <select id="priority">
+            <option value="Niski">Niski</option>
+            <option value="Średni">Średni</option>
+            <option value="Pilny">Pilny</option>
+          </select>
+          <input type="date" id="due_date" required>
+          <label for="task-image">📸 Dodaj obrazek (opcjonalnie)</label>
+          <input type="file" id="task-image" accept="image/*">
+          <button type="button" id="add-task">Dodaj zadanie</button>
+        </form>
+      </div>
+
+      <!-- ZADANIA UKOŃCZONE -->
+      <div id="completed-tab" class="tab-content">
+        <h3>Ukończone zadania</h3>
+        <ul id="completed-tasks"></ul>
       </div>
     </section>
   </main>
@@ -86,7 +105,6 @@
     <p>© 2025 TaskApp • PWA</p>
   </footer>
 
-  <!-- Zewnętrzny plik JS -->
   <script src="app.js"></script>
 </body>
 </html>
