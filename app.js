@@ -1,116 +1,204 @@
 const API_URL = "https://api.pkportfolio.pl/tasksapi";
-let token = localStorage.getItem("token");
+let token = localStorage.getItem("token") || "";
 
-// === AUTH ===
-document.getElementById("login").onclick = async () => {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
-  const form = new FormData();
-  form.append("username", username);
+// --- Helper ---
+const headers = () => ({
+  "Content-Type": "application/json",
+  "Authorization": `Bearer ${token}`
+});
+
+const authSection = document.getElementById("auth-section");
+const tasksSection = document.getElementById("tasks-section");
+const authMsg = document.getElementById("auth-msg");
+const userInfo = document.getElementById("user-info");
+
+const showMsg = (msg, error = false) => {
+  authMsg.textContent = msg;
+  authMsg.style.color = error ? "red" : "green";
+};
+
+// --- Rejestracja ---
+document.getElementById("register").addEventListener("click", async () => {
+  const user = {
+    first_name: document.getElementById("first_name").value.trim(),
+    last_name: document.getElementById("last_name").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    password: document.getElementById("password").value.trim(),
+    confirm_password: document.getElementById("confirm_password").value.trim()
+  };
+
+  if (!user.first_name || !user.last_name || !user.email || !user.password || !user.confirm_password) {
+    showMsg("Wszystkie pola są wymagane!", true);
+    return;
+  }
+
+  const res = await fetch(`${API_URL}/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(user)
+  });
+
+  const data = await res.json();
+  if (res.ok) showMsg("Zarejestrowano pomyślnie!");
+  else showMsg(data.detail || "Błąd rejestracji", true);
+});
+
+// --- Logowanie ---
+document.getElementById("login").addEventListener("click", async () => {
+  const email = document.getElementById("login-email").value.trim();
+  const password = document.getElementById("login-password").value.trim();
+
+  const form = new URLSearchParams();
+  form.append("username", email);
   form.append("password", password);
 
-  const res = await fetch(`${API_URL}/login`, { method: "POST", body: form });
+  const res = await fetch(`${API_URL}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: form
+  });
+
   const data = await res.json();
   if (res.ok) {
     token = data.access_token;
     localStorage.setItem("token", token);
-    showTasksSection();
-  } else {
-    document.getElementById("auth-msg").innerText = data.detail || "Błąd logowania";
+    await loadUserData();
+  } else showMsg(data.detail || "Błąd logowania", true);
+});
+
+// --- Wylogowanie ---
+document.getElementById("logout-btn").addEventListener("click", () => {
+  localStorage.removeItem("token");
+  token = "";
+  authSection.classList.remove("hidden");
+  tasksSection.classList.add("hidden");
+  document.getElementById("logout-btn").classList.add("hidden");
+  document.getElementById("login-btn").classList.remove("hidden");
+  showMsg("Wylogowano");
+});
+
+// --- Wczytanie użytkownika ---
+async function loadUserData() {
+  const res = await fetch(`${API_URL}/whoami`, { headers: headers() });
+  if (!res.ok) {
+    showMsg("Sesja wygasła. Zaloguj się ponownie.", true);
+    localStorage.removeItem("token");
+    return;
   }
-};
 
-document.getElementById("register").onclick = async () => {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
-  const res = await fetch(`${API_URL}/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password })
-  });
-  const data = await res.json();
-  document.getElementById("auth-msg").innerText = data.message || data.detail;
-};
+  const user = await res.json();
+  userInfo.textContent = `${user.first_name} ${user.last_name}`;
+  userInfo.classList.remove("hidden");
 
-// === UI ===
-function showTasksSection() {
-  document.getElementById("auth-section").classList.add("hidden");
-  document.getElementById("tasks-section").classList.remove("hidden");
+  authSection.classList.add("hidden");
+  tasksSection.classList.remove("hidden");
+  document.getElementById("login-btn").classList.add("hidden");
+  document.getElementById("logout-btn").classList.remove("hidden");
+
+  loadSubjects();
   loadTasks();
 }
 
-document.getElementById("logout-btn").onclick = () => {
-  token = null;
-  localStorage.removeItem("token");
-  location.reload();
-};
+// --- Przedmioty ---
+async function loadSubjects() {
+  const res = await fetch(`${API_URL}/subjects`, { headers: headers() });
+  const data = await res.json();
+  const list = document.getElementById("subjects");
+  const select = document.getElementById("subject-select");
 
-document.querySelectorAll(".tab").forEach(btn => {
-  btn.addEventListener("click", e => {
+  list.innerHTML = "";
+  select.innerHTML = '<option value="">Wybierz przedmiot</option>';
+
+  data.forEach(sub => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${sub.name}</strong> - ${sub.description || "Brak opisu"}
+      <button data-id="${sub.id}" class="delete-subject">Usuń</button>`;
+    list.appendChild(li);
+
+    const opt = document.createElement("option");
+    opt.value = sub.name;
+    opt.textContent = sub.name;
+    select.appendChild(opt);
+  });
+
+  document.querySelectorAll(".delete-subject").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.id;
+      await fetch(`${API_URL}/subjects/${id}`, { method: "DELETE", headers: headers() });
+      loadSubjects();
+    });
+  });
+}
+
+document.getElementById("add-subject").addEventListener("click", async () => {
+  const name = document.getElementById("new-subject-name").value.trim();
+  const desc = document.getElementById("new-subject-desc").value.trim();
+  if (!name) return alert("Podaj nazwę przedmiotu!");
+
+  await fetch(`${API_URL}/subjects`, {
+    method: "POST",
+    headers: headers(),
+    body: JSON.stringify({ name, description: desc })
+  });
+  document.getElementById("new-subject-name").value = "";
+  document.getElementById("new-subject-desc").value = "";
+  loadSubjects();
+});
+
+// --- Zadania ---
+async function loadTasks() {
+  const res = await fetch(`${API_URL}/tasks`, { headers: headers() });
+  const data = await res.json();
+  const list = document.getElementById("tasks");
+  list.innerHTML = "";
+
+  data.forEach(t => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${t.title}</strong> [${t.subject}] 
+      - Priorytet: ${t.priority}, termin: ${t.due_date}, dodano: ${new Date(t.created_at).toLocaleString()}
+      <button data-id="${t.id}" class="delete-task">❌</button>`;
+    list.appendChild(li);
+  });
+
+  document.querySelectorAll(".delete-task").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.id;
+      await fetch(`${API_URL}/tasks/${id}`, { method: "DELETE", headers: headers() });
+      loadTasks();
+    });
+  });
+}
+
+document.getElementById("add-task").addEventListener("click", async () => {
+  const task = {
+    title: document.getElementById("task-title").value.trim(),
+    subject: document.getElementById("subject-select").value.trim(),
+    priority: document.getElementById("priority").value,
+    due_date: document.getElementById("due_date").value
+  };
+
+  if (!task.title || !task.subject || !task.due_date) return alert("Wypełnij wszystkie pola!");
+
+  await fetch(`${API_URL}/tasks`, {
+    method: "POST",
+    headers: headers(),
+    body: JSON.stringify(task)
+  });
+
+  document.getElementById("task-title").value = "";
+  document.getElementById("due_date").value = "";
+  loadTasks();
+});
+
+// --- Tabs ---
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.addEventListener("click", () => {
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
     document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-    btn.classList.add("active");
-    document.getElementById(`${btn.dataset.tab}-tab`).classList.add("active");
+    tab.classList.add("active");
+    document.getElementById(`${tab.dataset.tab}-tab`).classList.add("active");
   });
 });
 
-// === TASKS ===
-async function loadTasks() {
-  const res = await fetch(`${API_URL}/tasks`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  const data = await res.json();
-  const ul = document.getElementById("tasks");
-  ul.innerHTML = "";
-  data.forEach(task => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <div>
-        <strong>${task.title}</strong><br>
-        <small>${task.subject} • ${task.priority} • ${task.due_date}</small>
-      </div>
-      <div>
-        <button onclick="deleteTask(${task.id})">🗑️</button>
-      </div>`;
-    ul.appendChild(li);
-  });
-}
-
-async function deleteTask(id) {
-  if (!confirm("Usunąć to zadanie?")) return;
-  await fetch(`${API_URL}/tasks/${id}`, {
-    method: "DELETE",
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  loadTasks();
-}
-
-document.getElementById("add-task").onclick = async () => {
-  const subject = document.getElementById("new-subject").value || document.getElementById("subject").value;
-  const priority = document.getElementById("priority").value;
-  const title = document.getElementById("title").value;
-  const due_date = document.getElementById("due_date").value;
-
-  const res = await fetch(`${API_URL}/tasks`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ subject, priority, title, due_date })
-  });
-  if (res.ok) {
-    alert("Dodano zadanie!");
-    loadTasks();
-  } else {
-    alert("Błąd dodawania zadania");
-  }
-};
-
-// === AUTOLOGIN ===
-if (token) showTasksSection();
-
-// === REGISTER SW ===
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js");
-}
+// --- Autologin jeśli token istnieje ---
+if (token) loadUserData();

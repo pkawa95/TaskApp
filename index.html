@@ -11,45 +11,71 @@
   <header>
     <h1>🎓 TaskApp</h1>
     <nav id="nav">
+      <span id="user-info" class="hidden"></span>
       <button id="login-btn">Zaloguj</button>
       <button id="logout-btn" class="hidden">Wyloguj</button>
     </nav>
   </header>
 
   <main>
+    <!-- SEKCA LOGOWANIA / REJESTRACJI -->
     <section id="auth-section">
       <h2>Logowanie / Rejestracja</h2>
-      <input type="text" id="username" placeholder="Login">
-      <input type="password" id="password" placeholder="Hasło">
-      <button id="register">Zarejestruj</button>
-      <button id="login">Zaloguj</button>
+
+      <div id="register-form" class="form">
+        <input type="text" id="first_name" placeholder="Imię">
+        <input type="text" id="last_name" placeholder="Nazwisko">
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Hasło">
+        <input type="password" id="confirm_password" placeholder="Powtórz hasło">
+        <button id="register">Zarejestruj</button>
+      </div>
+
+      <div id="login-form" class="form">
+        <input type="email" id="login-email" placeholder="Email">
+        <input type="password" id="login-password" placeholder="Hasło">
+        <button id="login">Zaloguj</button>
+      </div>
+
       <p id="auth-msg"></p>
     </section>
 
+    <!-- SEKCA ZADAŃ -->
     <section id="tasks-section" class="hidden">
-      <h2>Twoje zadania</h2>
+      <h2>Twoje przedmioty i zadania</h2>
+
       <div class="tabs">
-        <button class="tab active" data-tab="list">📋 Dostępne</button>
-        <button class="tab" data-tab="new">➕ Dodaj nowy</button>
+        <button class="tab active" data-tab="subjects">📚 Przedmioty</button>
+        <button class="tab" data-tab="tasks">✅ Zadania</button>
       </div>
 
-      <div id="list-tab" class="tab-content active">
+      <!-- PRZEDMIOTY -->
+      <div id="subjects-tab" class="tab-content active">
+        <h3>Twoje przedmioty</h3>
+        <ul id="subjects"></ul>
+
+        <input type="text" id="new-subject-name" placeholder="Nazwa przedmiotu">
+        <input type="text" id="new-subject-desc" placeholder="Opis (opcjonalny)">
+        <button id="add-subject">Dodaj przedmiot</button>
+      </div>
+
+      <!-- ZADANIA -->
+      <div id="tasks-tab" class="tab-content">
+        <h3>Twoje zadania</h3>
         <ul id="tasks"></ul>
-      </div>
 
-      <div id="new-tab" class="tab-content">
-        <select id="subject">
+        <h4>Dodaj nowe zadanie</h4>
+        <select id="subject-select">
           <option value="">Wybierz przedmiot</option>
         </select>
-        <input type="text" id="new-subject" placeholder="Lub wpisz nowy przedmiot">
+        <input type="text" id="task-title" placeholder="Tytuł zadania">
         <select id="priority">
           <option value="Niski">Niski</option>
           <option value="Średni">Średni</option>
           <option value="Pilny">Pilny</option>
         </select>
-        <input type="text" id="title" placeholder="Temat zadania">
         <input type="date" id="due_date">
-        <button id="add-task">Dodaj</button>
+        <button id="add-task">Dodaj zadanie</button>
       </div>
     </section>
   </main>
