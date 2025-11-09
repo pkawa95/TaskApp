@@ -178,6 +178,7 @@ async function loadSubjects() {
   });
 }
 
+// Dodawanie nowego przedmiotu
 document.getElementById("add-subject").onclick = async () => {
   const name = document.getElementById("new-subject-name").value.trim();
   const description = document.getElementById("new-subject-desc").value.trim();
@@ -230,13 +231,16 @@ async function loadTasks() {
     const subj = subjects.find((s) => s.id === t.subject_id);
     const subjName = subj ? subj.name : "Brak";
     const subjColor = subj ? subj.color : "#475569";
+    const subjTeacher = subj && subj.teacher ? subj.teacher : "";
 
     const li = document.createElement("li");
     li.dataset.priority = t.priority;
     li.innerHTML = `
       <div class="task-header">
         <strong class="task-title">${t.title}</strong>
-        <span class="subject-badge" style="background:${subjColor};color:${getTextColor(subjColor)}">${subjName}</span>
+        <span class="subject-badge" style="background:${subjColor};color:${getTextColor(subjColor)}">
+          ${subjName}${subjTeacher ? ` <small>(${subjTeacher})</small>` : ""}
+        </span>
       </div>
       ${t.description ? `<p>${t.description}</p>` : ""}
       ${t.image ? `<img src="data:image/png;base64,${t.image}" alt="obrazek" style="max-width:100%;border-radius:8px;margin-top:8px;">` : ""}
@@ -350,7 +354,7 @@ async function loadHistory() {
 }
 
 // =====================
-// Narzędzie: dobór koloru tekstu do tła
+// Narzędzie: kolor tekstu do tła
 // =====================
 function getTextColor(hex) {
   const c = hex.replace("#", "");
@@ -363,5 +367,4 @@ function getTextColor(hex) {
 // =====================
 // Start
 // =====================
-
 checkLogin();
