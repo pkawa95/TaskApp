@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskApp</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🎓 TaskApp</h1>
+    <nav id="nav">
+      <button id="login-btn">Zaloguj</button>
+      <button id="logout-btn" class="hidden">Wyloguj</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="auth-section">
+      <h2>Logowanie / Rejestracja</h2>
+      <input type="text" id="username" placeholder="Login">
+      <input type="password" id="password" placeholder="Hasło">
+      <button id="register">Zarejestruj</button>
+      <button id="login">Zaloguj</button>
+      <p id="auth-msg"></p>
+    </section>
+
+    <section id="tasks-section" class="hidden">
+      <h2>Twoje zadania</h2>
+      <div class="tabs">
+        <button class="tab active" data-tab="list">📋 Dostępne</button>
+        <button class="tab" data-tab="new">➕ Dodaj nowy</button>
+      </div>
+
+      <div id="list-tab" class="tab-content active">
+        <ul id="tasks"></ul>
+      </div>
+
+      <div id="new-tab" class="tab-content">
+        <select id="subject">
+          <option value="">Wybierz przedmiot</option>
+        </select>
+        <input type="text" id="new-subject" placeholder="Lub wpisz nowy przedmiot">
+        <select id="priority">
+          <option value="Niski">Niski</option>
+          <option value="Średni">Średni</option>
+          <option value="Pilny">Pilny</option>
+        </select>
+        <input type="text" id="title" placeholder="Temat zadania">
+        <input type="date" id="due_date">
+        <button id="add-task">Dodaj</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 TaskApp • PWA</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
