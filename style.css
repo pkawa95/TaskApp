@@ -402,3 +402,393 @@ footer {
   li { font-size: 0.95em; }
   nav button { padding: 0.5em 1em; }
 }
+
+/* ==========================================================
+   🎓 TASKAPP — ULTRA STYLE 2025 (STABLE WOW + CAPSULE FIX)
+   ========================================================== */
+
+/* ---------- GLOBAL ---------- */
+* {
+  box-sizing: border-box;
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  transition: all 0.25s ease;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  background: radial-gradient(circle at 20% 20%, #0f172a, #020617 80%);
+  color: #e2e8f0;
+  background-attachment: fixed;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 30% 30%, rgba(56, 189, 248, 0.05), transparent 70%);
+  animation: ambientGlow 12s ease-in-out infinite alternate;
+  z-index: -1;
+}
+
+@keyframes ambientGlow {
+  0% { opacity: 0.3; transform: scale(1); }
+  100% { opacity: 0.7; transform: scale(1.1); }
+}
+
+::selection {
+  background: #38bdf8;
+  color: #0f172a;
+}
+
+/* ---------- HEADER ---------- */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(20px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2em 2em;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+}
+
+header h1 {
+  font-size: 1.8em;
+  color: #38bdf8;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+}
+
+nav button {
+  background: linear-gradient(90deg, rgba(56,189,248,0.2), rgba(129,140,248,0.2));
+  color: #f8fafc;
+  border: 1px solid rgba(56,189,248,0.4);
+  padding: 0.6em 1.2em;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+nav button:hover {
+  background: linear-gradient(90deg, #38bdf8, #818cf8);
+  color: #0f172a;
+  box-shadow: 0 0 15px rgba(56,189,248,0.7);
+  transform: scale(1.05);
+}
+
+/* ---------- MAIN ---------- */
+main {
+  flex: 1;
+  padding: 2em;
+  max-width: 960px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ---------- AUTH SECTION ---------- */
+#auth-section {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(25px);
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(56,189,248,0.25);
+  padding: 3em;
+  text-align: center;
+  border: 1px solid rgba(56,189,248,0.25);
+}
+
+/* ---------- TABS ---------- */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  margin-bottom: 1.5em;
+  justify-content: center;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  background: rgba(30, 41, 59, 0.6);
+  color: #94a3b8;
+  border: 1px solid rgba(56,189,248,0.25);
+  padding: 1em;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.tab.active {
+  background: linear-gradient(90deg, #38bdf8, #818cf8);
+  color: #0f172a;
+  box-shadow: 0 0 15px rgba(56,189,248,0.6);
+}
+
+/* ---------- KARTY ZADAŃ ---------- */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5em 0;
+}
+
+li {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(56,189,248,0.2);
+  padding: 1.2em;
+  border-radius: 14px;
+  margin-bottom: 0.8em;
+  box-shadow: 0 0 20px rgba(56,189,248,0.1);
+  animation: slideUp 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+li:hover {
+  transform: scale(1.01);
+  box-shadow: 0 0 20px rgba(56,189,248,0.3);
+}
+
+/* Priorytety */
+li[data-priority="Niski"] { border-left: 5px solid #22c55e; }
+li[data-priority="Średni"] { border-left: 5px solid #facc15; }
+li[data-priority="Pilny"] {
+  border-left: 5px solid #ef4444;
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 10px rgba(239,68,68,0.3); }
+  50% { box-shadow: 0 0 25px rgba(239,68,68,0.6); }
+}
+
+/* ---------- SUBJECT BADGE ---------- */
+.subject-badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 0.35em 1em;
+  font-size: 0.85em;
+  border-radius: 20px;
+  font-weight: 600;
+  color: #0f172a;
+  text-shadow: 0 0 5px rgba(255,255,255,0.25);
+  margin-bottom: 0.5em;
+}
+
+/* ---------- Tytuł zadania ---------- */
+.task-title {
+  font-weight: 700;
+  font-size: 1.1em;
+  margin-bottom: 0.2em;
+}
+
+/* ---------- PRZYCISKI WEWNĄTRZ ZADANIA ---------- */
+.task-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 1em;
+  flex-wrap: wrap;
+}
+
+.task-buttons button {
+  flex: 1;
+  min-width: 110px;
+  text-align: center;
+}
+
+.delete-btn, .done-btn {
+  position: static;
+  padding: 0.5em 0.8em;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  color: #fff;
+}
+
+.delete-btn {
+  background: rgba(239,68,68,0.85);
+}
+.delete-btn:hover { background: #dc2626; }
+
+.done-btn {
+  background: rgba(34,197,94,0.9);
+}
+.done-btn:hover { background: #16a34a; }
+
+/* ---------- KARTY PRZEDMIOTÓW ---------- */
+.subject-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+  padding: 1.2em;
+  background: rgba(15,23,42,0.85);
+  border: 1px solid rgba(56,189,248,0.2);
+  border-radius: 14px;
+  box-shadow: 0 0 20px rgba(56,189,248,0.1);
+}
+
+.subject-card .subject-badge {
+  font-size: 0.9em;
+  padding: 0.4em 1em;
+  align-self: flex-start;
+}
+
+.subject-card .teacher {
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.subject-card .delete-btn {
+  align-self: flex-end;
+  padding: 0.4em 1em;
+  font-size: 0.85em;
+  border-radius: 8px;
+  background: rgba(239,68,68,0.8);
+}
+.subject-card .delete-btn:hover {
+  background: #dc2626;
+}
+
+/* ---------- HISTORIA ---------- */
+#history-list li {
+  border-left: 4px solid #38bdf8;
+  padding-left: 1em;
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+  text-align: center;
+  padding: 1em;
+  background: rgba(30,41,59,0.7);
+  color: #94a3b8;
+  font-size: 0.9em;
+  border-top: 1px solid rgba(56,189,248,0.25);
+  backdrop-filter: blur(12px);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 700px) {
+  main { padding: 1em; }
+  header { flex-direction: column; align-items: flex-start; gap: 0.8em; }
+  .tabs { flex-direction: column; }
+  li {
+    font-size: 0.95em;
+    padding: 1em;
+  }
+
+  .task-buttons {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .task-buttons button {
+    flex: 1;
+    font-size: 0.9em;
+    padding: 0.7em;
+  }
+
+  .subject-card .delete-btn {
+    align-self: flex-start;
+    margin-top: 0.5em;
+  }
+}
+
+
+/* ==========================================================
+   🔧 FIX — poprawny układ kapsułek w zadaniach i przedmiotach
+   ========================================================== */
+
+/* --- ZADANIA --- */
+li .subject-badge {
+  display: inline-block;
+  align-self: flex-start;
+  margin-bottom: 0.6em;
+}
+
+li .task-title {
+  font-weight: 700;
+  font-size: 1.05em;
+  margin: 0 0 0.4em 0;
+  color: #f8fafc;
+}
+
+li p,
+li div,
+li span {
+  margin: 0.2em 0;
+}
+
+/* --- PRZEDMIOTY --- */
+.subject-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6em;
+  padding: 1.2em;
+  background: rgba(15,23,42,0.85);
+  border: 1px solid rgba(56,189,248,0.2);
+  border-radius: 14px;
+  box-shadow: 0 0 20px rgba(56,189,248,0.1);
+}
+
+.subject-card .subject-badge {
+  font-size: 0.9em;
+  padding: 0.4em 1em;
+  align-self: flex-start;
+  margin-bottom: 0.4em;
+}
+
+.subject-card .teacher {
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 0.6em;
+}
+
+.subject-card .delete-btn {
+  align-self: flex-end;
+  background: rgba(239,68,68,0.85);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.4em 1em;
+  font-weight: 600;
+  font-size: 0.85em;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  width: auto;
+  min-width: 80px;
+}
+.subject-card .delete-btn:hover {
+  background: #dc2626;
+}
+
+/* --- Drobne poprawki mobilne --- */
+@media (max-width: 700px) {
+  li .subject-badge { margin-bottom: 0.4em; }
+  .subject-card .delete-btn { align-self: center; margin-top: 0.5em; }
+}
