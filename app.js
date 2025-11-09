@@ -363,4 +363,5 @@ function getTextColor(hex) {
 // =====================
 // Start
 // =====================
+
 checkLogin();
